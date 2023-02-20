@@ -1,9 +1,18 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const DATABASE_API_URL = 'http://localhost:2700';
+const CONTROLLER_API_URL = 'http://localhost:1800';
 
 export const environment = {
-  production: false
+  production: false,
+
+  // Identity management
+  loginUrl: `${DATABASE_API_URL}/login`,
+  logoutUrl: `${DATABASE_API_URL}/logout`,
+
+  // Songs
+
 };
 
 /*

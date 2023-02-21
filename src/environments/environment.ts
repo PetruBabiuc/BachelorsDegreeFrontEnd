@@ -6,7 +6,12 @@ const CONTROLLER_API_URL = 'http://localhost:1800';
 
 export const environment = {
   production: false,
+  // Roles
+  adminUserType: 1,
+  microserviceUserType: 2,
+  simpleUserType: 3,
 
+  // URLs
   // Identity management
   databaseRootUrl: DATABASE_API_URL,
   loginUrl: `${DATABASE_API_URL}/login`,

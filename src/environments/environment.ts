@@ -8,6 +8,7 @@ export const environment = {
   production: false,
 
   // Identity management
+  databaseRootUrl: DATABASE_API_URL,
   loginUrl: `${DATABASE_API_URL}/login`,
   logoutUrl: `${DATABASE_API_URL}/logout`,
 

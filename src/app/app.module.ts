@@ -7,6 +7,11 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './component/login/login.component';
 import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { PanelModule } from 'primeng/panel';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,7 +24,13 @@ import { MenubarModule } from 'primeng/menubar';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MenubarModule
+    MenubarModule,
+    ButtonModule,
+    PanelModule,
+    FormsModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

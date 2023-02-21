@@ -1,1 +1,30 @@
-<div>Login</div>
+<br />
+<p-panel header="Login">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-user"></i>
+            </span>
+            <span class="p-float-label">
+                <input [(ngModel)]="username" type="text" formControlName="username"
+                    [ngClass]="{'ng-dirty': loginForm.controls.username.invalid, 'ng-invalid': loginForm.controls.username.invalid }"
+                    pInputText>
+                <label for="float-input">Username</label>
+            </span>
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-lock"></i>
+            </span>
+            <span class="p-float-label">
+                <input [(ngModel)]="password" type="password" formControlName="password"
+                    [ngClass]="{'ng-dirty': loginForm.controls.password.invalid, 'ng-invalid': loginForm.controls.password.invalid }"
+                    pInputText>
+                <label for="float-input">Password</label>
+            </span>
+        </div>
+        
+        <p-button label="Submit" [disabled]="!loginForm.valid" (click)="onSubmit()"></p-button>
+    </form>
+</p-panel>

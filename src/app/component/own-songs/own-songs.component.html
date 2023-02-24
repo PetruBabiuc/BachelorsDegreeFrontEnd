@@ -1,0 +1,53 @@
+<br />
+<p-panel header="Own songs">
+    <p-dataView #dv [value]="songs" [paginator]="true" [rows]="3" filterBy="songName" [sortField]="sortField"
+        [sortOrder]="sortOrder" layout="list">
+        <ng-template pTemplate="header">
+            <div>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input type="search" pInputText placeholder="Search by name"
+                        (input)="dv.filter($any($event).target.value)">
+                </span>
+                <br />
+                <p-dropdown [options]="sortOptions" [(ngModel)]="sortField" placeholder="Sort By Price"
+                    (onChange)="onSortChange($event)" styleClass="mb-2 md:mb-0"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template let-song pTemplate="listItem">
+            <div class="p-col-12">
+                <div class="list-item">
+                    <img src="assets/song.jpg" alt="No image :(" />
+                    <div class="list-detail">
+                        <div class="name">{{song.songName}}</div>
+                        <div class="description">{{song.author}}</div>
+                        <i class="pi pi-tag category-icon"></i><span
+                            class="category">{{genres.get(song.genreId)}}</span>
+                    </div>
+                    <div class="product-list-action">
+                        <p-button icon="pi pi-pencil" label="Edit"></p-button>
+                        <button icon="pi pi-trash" pButton type="button" label="Delete"
+                            class="p-button-danger"></button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataView>
+    <!-- <p-orderList [value]="songs" filterBy="songName,author">
+        <ng-template let-song pTemplate="item">
+            <div class="song-container">
+                <img src="assets/song.jpg" style="display:inline-block;margin:2px 0 2px 2px" width="80">
+                <div class="song-information-container">
+                    <span class="song-name">
+                        {{song.songName}}
+                    </span>
+                    <br />
+                    <br />
+                    <i class="pi pi-info-circle"></i> Genre: {{genres.get(song.genreId)}}
+                    <br />
+                    <i class="pi pi-info-circle"></i> Author: {{song.author}}
+                </div>
+            </div>
+        </ng-template>
+    </p-orderList> -->
+</p-panel>

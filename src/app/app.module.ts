@@ -11,7 +11,13 @@ import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { OwnSongsComponent } from './component/own-songs/own-songs.component';
+import { JwtInterceptor } from './service/interceptor';
+import { OrderListModule } from 'primeng/orderlist';
+import { DataViewModule } from 'primeng/dataview';
+import { DropdownModule } from 'primeng/dropdown';
+import { AddSongComponent } from './component/add-song/add-song.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     NavbarComponent,
     LoginComponent,
+    OwnSongsComponent,
+    AddSongComponent
   ],
   imports: [
     BrowserModule,
@@ -31,8 +39,13 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     InputTextModule,
     HttpClientModule,
+    OrderListModule,
+    DataViewModule,
+    DropdownModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

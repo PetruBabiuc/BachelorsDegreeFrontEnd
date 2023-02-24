@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Account } from 'src/app/model';
 import { AccountService } from 'src/app/service';
@@ -14,7 +13,6 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[];
   constructor(
     private accountService: AccountService,
-    private router: Router
   ) {
     this.items = this.getMenuItems(this.accountService.getCurrentAccount());
 
@@ -23,9 +21,12 @@ export class NavbarComponent implements OnInit {
   }
 
   private getMenuItems(account: Account | null): MenuItem[] {
-    const homeMenuItem = this.getHomeMenuItem();
-    const accountMenuItem = this.getAccountButton(account);
-    return [homeMenuItem, accountMenuItem];
+    let menuItems = [this.getHomeMenuItem()];
+
+    if (account !== null)
+      menuItems = [...menuItems, this.getSongsMenuItem(account)];
+
+    return [...menuItems, this.getAccountButton(account)];
   }
 
   private getHomeMenuItem(): MenuItem {
@@ -67,6 +68,35 @@ export class NavbarComponent implements OnInit {
       ];
 
     return accountMenuItem;
+  }
+
+  private getSongsMenuItem(account: Account): MenuItem {
+    const songsMenuItem = {
+      label: 'Songs',
+      items: new Array<MenuItem>()
+    };
+
+    if (account.typeId === environment.simpleUserType)
+      songsMenuItem.items = [
+        {
+          label: 'Own songs',
+          routerLink: '/own-songs'
+        },
+        {
+          label: 'Add song',
+          icon: 'pi pi-plus',
+          routerLink: '/add-song'
+        }
+      ];
+    else
+      songsMenuItem.items = [
+        {
+          label: 'All songs',
+          routerLink: '/all-songs'
+        }
+      ];
+
+    return songsMenuItem;
   }
 
   ngOnInit(): void {

@@ -12,13 +12,17 @@ export const environment = {
   simpleUserType: 3,
 
   // URLs
+  
   // Identity management
   databaseRootUrl: DATABASE_API_URL,
   loginUrl: `${DATABASE_API_URL}/login`,
   logoutUrl: `${DATABASE_API_URL}/logout`,
 
-  // Songs
+  // Genres
+  genresUrl: `${DATABASE_API_URL}/songs-genres`,
 
+  // Controller
+  controllerRootUrl: CONTROLLER_API_URL,
 };
 
 /*

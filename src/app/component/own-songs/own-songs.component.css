@@ -1,0 +1,12 @@
+div.song-container {
+    display: flex;
+}
+
+div.song-information-container {
+    margin-left: 30px;
+}
+
+span.song-name {
+    font-weight: bold;
+    font-size: larger;
+}

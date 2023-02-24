@@ -58,7 +58,7 @@ export class AccountService {
   private jwtToAccount(jwt: string): Account {
     const payload = this.jwtHelper.decodeToken(jwt);
     return {
-      userId: payload.userId,
+      userId: payload.user_id,
       userName: payload.sub,
       isActive: payload.is_active,
       typeId: payload.user_type_id,

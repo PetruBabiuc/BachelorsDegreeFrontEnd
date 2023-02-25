@@ -1,1 +1,26 @@
-<p>add-song works!</p>
+<br />
+<p-panel header="Add song">
+    <form class="song-form" [formGroup]="songForm" (ngSubmit)="onSubmit()">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="name" type="text" formControlName="name"
+                    [ngClass]="{'ng-dirty': songForm.controls.name.invalid, 'ng-invalid': songForm.controls.name.invalid }"
+                    pInputText>
+                <label for="float-input">Name</label>
+            </span>
+        </div>
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="author" type="text" formControlName="author"
+                    [ngClass]="{'ng-dirty': songForm.controls.author.invalid, 'ng-invalid': songForm.controls.author.invalid }"
+                    pInputText>
+                <label for="float-input">Author</label>
+            </span>
+        </div>
+
+        <p-fileUpload name="songFile" accept="audio/mpeg" [maxFileSize]="15_000_000" 
+            [showCancelButton]="false" [showUploadButton]="false"></p-fileUpload>
+        <br />
+        <button pButton label="Submit" [disabled]="!isFormValid()"></button>
+    </form>
+</p-panel>

@@ -45,6 +45,17 @@ export class SongService {
       .subscribe(songs => this.ownSongsSubject.next(songs));
   }
 
+  addSong(name: string, author: string, song: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('author', author);
+    formData.append('song', song);
+
+    return this.http.post<any>(environment.songAdderUrl, formData).pipe(
+      map(response => response.genre)
+    );
+  }
+
   private mapResponseToSong(song: any): Song {
     return {
       songId: song.song_id,

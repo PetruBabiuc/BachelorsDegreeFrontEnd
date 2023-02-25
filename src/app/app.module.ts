@@ -18,6 +18,7 @@ import { OrderListModule } from 'primeng/orderlist';
 import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
 import { AddSongComponent } from './component/add-song/add-song.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { AddSongComponent } from './component/add-song/add-song.component';
     OrderListModule,
     DataViewModule,
     DropdownModule,
+    FileUploadModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

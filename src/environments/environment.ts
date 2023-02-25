@@ -23,6 +23,9 @@ export const environment = {
 
   // Controller
   controllerRootUrl: CONTROLLER_API_URL,
+
+  // Songs
+  songAdderUrl: `${CONTROLLER_API_URL}/songs`,
 };
 
 /*

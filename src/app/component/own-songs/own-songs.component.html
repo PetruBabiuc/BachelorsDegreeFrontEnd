@@ -10,6 +10,7 @@
                         (input)="dv.filter($any($event).target.value)">
                 </span>
                 <br />
+                <br />
                 <p-dropdown [options]="sortOptions" [(ngModel)]="sortField" placeholder="Sort By Price"
                     (onChange)="onSortChange($event)" styleClass="mb-2 md:mb-0"></p-dropdown>
             </div>
@@ -26,6 +27,7 @@
                     </div>
                     <div class="product-list-action">
                         <p-button icon="pi pi-pencil" label="Edit"></p-button>
+                        <br />
                         <button icon="pi pi-trash" pButton type="button" label="Delete"
                             class="p-button-danger"></button>
                     </div>

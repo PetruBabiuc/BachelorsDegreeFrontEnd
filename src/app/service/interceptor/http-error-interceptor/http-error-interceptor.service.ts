@@ -1,6 +1,7 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError, retry } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
 import { AccountService } from '../../account/account.service';
 
 @Injectable({
@@ -8,7 +9,8 @@ import { AccountService } from '../../account/account.service';
 })
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) {
 
   }
@@ -21,6 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             return throwError(() => new Error(`Client side error: ${error.error.message}`));
           else if (error.status === 403 || error.status === 401) {
             this.accountService.logOut();
+            this.router.navigateByUrl('/home');
             return throwError(() => new Error('JWT Expired...'));
           }
           else

@@ -8,13 +8,11 @@ import { AccountService } from 'src/app/service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
-  @Input() username: string = '';
-  @Input() password: string = '';
+export class LoginComponent implements AfterViewInit {
 
   loginForm = this.fb.group({
-    username: [this.username, Validators.required],
-    password: [this.password, Validators.required]
+    userName: ['', Validators.required],
+    password: ['', Validators.required]
   });
 
   constructor(
@@ -22,9 +20,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private router: Router,
     private cdRef: ChangeDetectorRef
-  ) { }
-
-  ngOnInit(): void {
+  ) {
 
   }
 
@@ -44,13 +40,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    if(!this.loginForm.valid)
+    if (!this.loginForm.valid)
       return;
-    this.accountService.login(this.username, this.password).subscribe(
+
+    const userName = this.loginForm.controls.userName.value;
+    const password = this.loginForm.controls.password.value;
+
+    this.accountService.login(userName!, password!).subscribe(
       account => this.router.navigateByUrl('/home'),
       error => {
         if (error.status === 401)
           alert('Invalid credentials!');
+        else
+          throw error;
       }
     )
   }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Song } from 'src/app/model';
 import { environment } from 'src/environments/environment';
 import { AccountService } from '../account/account.service';
@@ -11,6 +11,7 @@ import { AccountService } from '../account/account.service';
 export class SongService {
   private ownSongsSubject: BehaviorSubject<Song[]>;
   private allSongsSubject: BehaviorSubject<Song[]>;
+  private isSubmittingSubject: BehaviorSubject<boolean>;
 
   constructor(
     private accountService: AccountService,
@@ -18,11 +19,20 @@ export class SongService {
   ) {
     this.ownSongsSubject = new BehaviorSubject<Song[]>([]);
     this.allSongsSubject = new BehaviorSubject<Song[]>([]);
+    this.isSubmittingSubject = new BehaviorSubject<boolean>(false);
 
     accountService.getObservableAccount().subscribe(_ => {
       this.ownSongsSubject.next([]);
       this.allSongsSubject.next([]);
     });
+  }
+
+  isSubmitting(): boolean {
+    return this.isSubmittingSubject.getValue();
+  }
+
+  isSubmittingObservable(): Observable<boolean> {
+    return this.isSubmittingSubject.asObservable();
   }
 
   getCurrentOwnSongs(): Song[] {
@@ -38,11 +48,15 @@ export class SongService {
 
     if (account === null)
       throw new Error('The refreshOwnSongs method has been called while not logged in...');
+
+
     this.http.get<any[]>(`${environment.databaseRootUrl}/users/${account.userId}/songs`)
       .pipe(
         map(songs => songs.map(song => this.mapResponseToSong(song)))
       )
-      .subscribe(songs => this.ownSongsSubject.next(songs));
+      .subscribe(songs =>
+        this.ownSongsSubject.next(songs)
+      );
   }
 
   addSong(name: string, author: string, song: File): Observable<string> {
@@ -51,8 +65,11 @@ export class SongService {
     formData.append('author', author);
     formData.append('song', song);
 
+    this.isSubmittingSubject.next(true);
+
     return this.http.post<any>(environment.songAdderUrl, formData).pipe(
-      map(response => response.genre)
+      map(response => response.genre),
+      tap(_ => this.isSubmittingSubject.next(false))
     );
   }
 

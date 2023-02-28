@@ -10,10 +10,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  items: MenuItem[];
+  items: MenuItem[] = [];
   constructor(
     private accountService: AccountService,
   ) {
+
+  }
+
+  ngOnInit(): void {
     this.items = this.getMenuItems(this.accountService.getCurrentAccount());
 
     this.accountService.getObservableAccount()
@@ -23,10 +27,32 @@ export class NavbarComponent implements OnInit {
   private getMenuItems(account: Account | null): MenuItem[] {
     let menuItems = [this.getHomeMenuItem()];
 
-    if (account !== null)
+    if (account !== null) {
       menuItems = [...menuItems, this.getSongsMenuItem(account)];
+      if (account.typeId === environment.simpleUserType)
+        menuItems = [...menuItems, this.getCrawlerMenuItem()]
+    }
 
     return [...menuItems, this.getAccountButton(account)];
+  }
+
+  private getCrawlerMenuItem(): MenuItem {
+    return {
+      label: 'Crawler',
+      icon: 'pi pi-sitemap',
+      items: [
+        {
+          label: 'Start crawling',
+          icon: 'pi pi-caret-right',
+          routerLink: '/start-crawling'
+        },
+        {
+          label: 'Status',
+          icon: 'pi pi-info',
+          routerLink: '/crawler-status'
+        }
+      ]
+    }
   }
 
   private getHomeMenuItem(): MenuItem {
@@ -97,9 +123,5 @@ export class NavbarComponent implements OnInit {
       ];
 
     return songsMenuItem;
-  }
-
-  ngOnInit(): void {
-
   }
 }

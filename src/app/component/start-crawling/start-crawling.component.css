@@ -1,0 +1,7 @@
+p-panel {
+    display: block;
+    width: 800px;
+}
+p-dropdown {
+    display: flex;
+}

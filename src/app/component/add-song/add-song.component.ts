@@ -10,13 +10,13 @@ import { SongService } from 'src/app/service';
   styleUrls: ['./add-song.component.css']
 })
 export class AddSongComponent implements AfterViewInit {
-  @Input() name: string = '';
-  @Input() author: string = '';
-  @ViewChild(FileUpload) songUpload!: FileUpload; 
+  @ViewChild(FileUpload) songUpload!: FileUpload;
+
+  isSubmitting: boolean;
 
   songForm = this.fb.group({
-    name: [this.name, Validators.required],
-    author: [this.author, Validators.required],
+    name: ['', Validators.required],
+    author: ['', Validators.required],
   });
 
   constructor(
@@ -25,10 +25,14 @@ export class AddSongComponent implements AfterViewInit {
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef
   ) {
-
+    this.isSubmitting = this.songService.isSubmitting();
+    this.songService.isSubmittingObservable().subscribe(isSubmitting =>
+      this.isSubmitting = isSubmitting
+    );
   }
+
   ngAfterViewInit(): void {
-        this.updateFieldsValidity();
+    this.updateFieldsValidity();
   }
 
   isFormValid(): boolean {
@@ -53,9 +57,14 @@ export class AddSongComponent implements AfterViewInit {
   onSubmit(): void {
     if (!this.isFormValid())
       return;
-    this.songService.addSong(this.name, this.author, this.songUpload.files[0]).subscribe(
+
+    const name = this.songForm.controls.name.value;
+    const author = this.songForm.controls.author.value;
+
+    this.songService.addSong(name!, author!, this.songUpload.files[0]).subscribe(
       genre => {
-        alert(`The song ${this.name} has the genre ${genre}!`);
+        alert(`The song ${name} has the genre ${genre}!\nCurrent route: ${this.router.url}`);
+        this.isSubmitting = false;
         this.songService.refreshOwnSongs();
         this.router.navigateByUrl('/own-songs');
       }

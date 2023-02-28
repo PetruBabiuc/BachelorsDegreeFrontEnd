@@ -13,12 +13,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OwnSongsComponent } from './component/own-songs/own-songs.component';
-import { JwtInterceptor } from './service/interceptor';
+import { HttpErrorInterceptor, JwtInterceptor } from './service/interceptor';
 import { OrderListModule } from 'primeng/orderlist';
 import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
 import { AddSongComponent } from './component/add-song/add-song.component';
 import { FileUploadModule } from 'primeng/fileupload';
+import { StartCrawlingComponent } from './component/start-crawling/start-crawling.component';
+import { CrawlerStateComponent } from './component/crawler-state/crawler-state.component';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     NavbarComponent,
     LoginComponent,
     OwnSongsComponent,
-    AddSongComponent
+    AddSongComponent,
+    StartCrawlingComponent,
+    CrawlerStateComponent
   ],
   imports: [
     BrowserModule,
@@ -44,9 +49,11 @@ import { FileUploadModule } from 'primeng/fileupload';
     DataViewModule,
     DropdownModule,
     FileUploadModule,
+    CheckboxModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

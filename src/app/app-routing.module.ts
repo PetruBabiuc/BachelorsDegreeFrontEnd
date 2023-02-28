@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {
+  AddSongComponent,
+  CrawlerStateComponent,
   HomeComponent,
   LoginComponent,
+  OwnSongsComponent,
+  StartCrawlingComponent,
 } from './component';
-import { AddSongComponent } from './component/add-song/add-song.component';
-import { OwnSongsComponent } from './component/own-songs/own-songs.component';
 import { IsNotLoggedService, IsSimpleUserService } from './service/page-guard';
 
 const routes: Routes = [
@@ -20,6 +22,10 @@ const routes: Routes = [
   // Songs
   { path: 'own-songs', component: OwnSongsComponent, canActivate: [IsSimpleUserService] },
   { path: 'add-song', component: AddSongComponent, canActivate: [IsSimpleUserService] },
+
+  // Crawler
+  { path: 'start-crawling', component: StartCrawlingComponent, canActivate: [IsSimpleUserService] },
+  { path: 'crawler-status', component: CrawlerStateComponent, canActivate: [IsSimpleUserService] },
 
   // Redirect to home in case of unmapped path
   { path: '**', redirectTo: '/home' },

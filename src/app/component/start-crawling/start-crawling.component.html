@@ -1,0 +1,61 @@
+<br />
+<p-panel header="Start crawling">
+    <form [formGroup]="crawlingRequestForm" (ngSubmit)="onSubmit()">
+        <br />
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <p-checkbox [binary]="true" [formControl]="crawlingRequestForm.controls['crawlNewDomain']"
+                    (onChange)="onCrawlNewDomainChange()" [readonly]="forceCrawlNewDomain"></p-checkbox>
+            </span>
+            <span class="p-float-label">
+                <input type="text" formControlName="domain"
+                    [ngClass]="{'ng-dirty': crawlingRequestForm.controls.domain.invalid, 'ng-invalid': crawlingRequestForm.controls.domain.invalid }"
+                    pInputText>
+                <label for="float-input">Domain</label>
+            </span>
+        </div>
+        <!-- <div class="p-inputgroup">
+            <p-checkbox label="Crawl a new domain" [readonly]="forceCrawlNewDomain"
+            [binary]="true" [formControl]="crawlingRequestForm.controls['crawlNewDomain']"
+            (onChange)="onCrawlNewDomainChange()"></p-checkbox>
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input type="text" formControlName="domain"
+                    [ngClass]="{'ng-dirty': crawlingRequestForm.controls.domain.invalid, 'ng-invalid': crawlingRequestForm.controls.domain.invalid }"
+                    pInputText>
+                <label for="float-input">Domain</label>
+            </span>
+        </div> -->
+
+        <div class="p-inputgroup">
+            <p-dropdown [options]="genres" styleClass="mb-2 md:mb-0" formControlName="desiredGenreId"
+                optionLabel="genreName" optionValue="genreId"></p-dropdown>
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input type="number" formControlName="maxCrawledResources"
+                    [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxCrawledResources.invalid, 'ng-invalid': crawlingRequestForm.controls.maxCrawledResources.invalid }"
+                    pInputText>
+                <label for="float-input">Maximum number of crawled resources</label>
+            </span>
+            <div style="margin-right: 20px;"></div>
+            <span class="p-float-label">
+                <input type="number" formControlName="maxComputedGenres"
+                    [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxComputedGenres.invalid, 'ng-invalid': crawlingRequestForm.controls.maxComputedGenres.invalid }"
+                    pInputText>
+                <label for="float-input">Maximum number of computed genres</label>
+            </span>
+        </div>
+
+        <!-- <div class="p-inputgroup">
+            
+        </div> -->
+
+        <button pButton [disabled]="!crawlingRequestForm.valid || isStarted" iconPos="right"
+            [icon]="isStarted ? 'pi pi-spin pi-spinner' : ''"
+            [label]="isStarted ? 'Crawling' : 'Start crawling'"></button>
+    </form>
+</p-panel>

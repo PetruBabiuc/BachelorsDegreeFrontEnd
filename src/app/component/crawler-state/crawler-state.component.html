@@ -1,0 +1,29 @@
+<br />
+<p-panel header="Crawler state">
+    <button pButton icon="pi pi-replay" iconPos="left" label="Update status" [disabled]="!updateAvailable"
+    (click)="onUpdateClick()"></button>
+    <br />
+    <br />
+    <div *ngIf="crawlerState !== null; else elseBlock">
+        <ul>
+            <li>Domain: {{crawlerState.domain}}</li>
+            <li>Crawling in progress: {{crawlerState.isStarted}}</li>
+            <li>Resources in queue: {{crawlerState.resourcesUrlsCount}}</li>
+            <li *ngIf="crawlerState.genreIdToSongsCount.length > 0; else elseBlock">
+                    Songs found:
+                    <ul>
+                        <li *ngFor="let pair of crawlerState.genreIdToSongsCount">
+                            {{genres.get(pair.genreId)}}: {{pair.songsCount}}
+                        </li>
+                    </ul>
+            </li>
+            <ng-template #elseBlock>
+                <li>All the songs already found were delivered.</li>
+            </ng-template>
+        </ul>
+    </div>
+    <ng-template #elseBlock>
+        <div>The crawler hasn't been used on this account yet.</div>
+        <div>There are no information to display.</div>
+    </ng-template>
+</p-panel>

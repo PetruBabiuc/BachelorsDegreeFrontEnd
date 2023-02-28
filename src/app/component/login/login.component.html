@@ -6,8 +6,8 @@
                 <i class="pi pi-user"></i>
             </span>
             <span class="p-float-label">
-                <input [(ngModel)]="username" type="text" formControlName="username"
-                    [ngClass]="{'ng-dirty': loginForm.controls.username.invalid, 'ng-invalid': loginForm.controls.username.invalid }"
+                <input type="text" formControlName="userName"
+                    [ngClass]="{'ng-dirty': loginForm.controls.userName.invalid, 'ng-invalid': loginForm.controls.userName.invalid }"
                     pInputText>
                 <label for="float-input">Username</label>
             </span>
@@ -18,7 +18,7 @@
                 <i class="pi pi-lock"></i>
             </span>
             <span class="p-float-label">
-                <input [(ngModel)]="password" type="password" formControlName="password"
+                <input type="password" formControlName="password"
                     [ngClass]="{'ng-dirty': loginForm.controls.password.invalid, 'ng-invalid': loginForm.controls.password.invalid }"
                     pInputText>
                 <label for="float-input">Password</label>

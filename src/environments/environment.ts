@@ -2,7 +2,8 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 const DATABASE_API_URL = 'http://localhost:2700';
-const CONTROLLER_API_URL = 'http://localhost:1800';
+const SONG_ADDER_CONTROLLER_URL = 'http://localhost:1800';
+const CRAWLER_MANAGEMENT_CONTROLLER_URL = 'http://localhost:1850/crawler';
 
 export const environment = {
   production: false,
@@ -21,11 +22,17 @@ export const environment = {
   // Genres
   genresUrl: `${DATABASE_API_URL}/songs-genres`,
 
-  // Controller
-  controllerRootUrl: CONTROLLER_API_URL,
+  // SongAdderController
+  songAdderRootUrl: SONG_ADDER_CONTROLLER_URL,
 
   // Songs
-  songAdderUrl: `${CONTROLLER_API_URL}/songs`,
+  songAdderUrl: `${SONG_ADDER_CONTROLLER_URL}/songs`,
+
+  // CrawlerManagementController
+  crawlerManagementRootUrl: CRAWLER_MANAGEMENT_CONTROLLER_URL,
+
+  startCrawlingUrl: `${CRAWLER_MANAGEMENT_CONTROLLER_URL}/start-crawling`,
+  crawlerStateUrl: `${CRAWLER_MANAGEMENT_CONTROLLER_URL}/status`,
 };
 
 /*

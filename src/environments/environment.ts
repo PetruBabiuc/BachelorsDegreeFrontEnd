@@ -19,6 +19,9 @@ export const environment = {
   loginUrl: `${DATABASE_API_URL}/login`,
   logoutUrl: `${DATABASE_API_URL}/logout`,
 
+  // Services
+  servicesUrl: `${DATABASE_API_URL}/services`,
+
   // Genres
   genresUrl: `${DATABASE_API_URL}/songs-genres`,
 

@@ -14,20 +14,6 @@
                 <label for="float-input">Domain</label>
             </span>
         </div>
-        <!-- <div class="p-inputgroup">
-            <p-checkbox label="Crawl a new domain" [readonly]="forceCrawlNewDomain"
-            [binary]="true" [formControl]="crawlingRequestForm.controls['crawlNewDomain']"
-            (onChange)="onCrawlNewDomainChange()"></p-checkbox>
-        </div>
-
-        <div class="p-inputgroup">
-            <span class="p-float-label">
-                <input type="text" formControlName="domain"
-                    [ngClass]="{'ng-dirty': crawlingRequestForm.controls.domain.invalid, 'ng-invalid': crawlingRequestForm.controls.domain.invalid }"
-                    pInputText>
-                <label for="float-input">Domain</label>
-            </span>
-        </div> -->
 
         <div class="p-inputgroup">
             <p-dropdown [options]="genres" styleClass="mb-2 md:mb-0" formControlName="desiredGenreId"
@@ -38,21 +24,23 @@
             <span class="p-float-label">
                 <input type="number" formControlName="maxCrawledResources"
                     [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxCrawledResources.invalid, 'ng-invalid': crawlingRequestForm.controls.maxCrawledResources.invalid }"
-                    pInputText>
+                    (change)="updateMaxPrice()" pInputText>
                 <label for="float-input">Maximum number of crawled resources</label>
             </span>
             <div style="margin-right: 20px;"></div>
             <span class="p-float-label">
                 <input type="number" formControlName="maxComputedGenres"
                     [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxComputedGenres.invalid, 'ng-invalid': crawlingRequestForm.controls.maxComputedGenres.invalid }"
-                    pInputText>
+                    (change)="updateMaxPrice()" pInputText>
                 <label for="float-input">Maximum number of computed genres</label>
             </span>
         </div>
 
-        <!-- <div class="p-inputgroup">
-            
-        </div> -->
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-dollar"></i></span>
+            <input type="text" pInputText readonly [value]="maxPrice">         
+        </div>
 
         <button pButton [disabled]="!crawlingRequestForm.valid || isStarted" iconPos="right"
             [icon]="isStarted ? 'pi pi-spin pi-spinner' : ''"

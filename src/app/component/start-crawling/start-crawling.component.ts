@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CrawlerState, Genre } from 'src/app/model';
+import { CrawlerState, Genre, PaidService } from 'src/app/model';
+import { PaidServiceService } from 'src/app/service';
 import { CrawlerService } from 'src/app/service/crawler/crawler.service';
 import { GenreService } from 'src/app/service/genre/genre.service';
 
@@ -13,20 +13,16 @@ import { GenreService } from 'src/app/service/genre/genre.service';
 export class StartCrawlingComponent implements AfterViewInit, OnInit {
   genres: Genre[] = [];
   crawlerState: CrawlerState | null = null;
-
-  // desiredGenreId: number = 1;
-  // maxCrawledResources: number = 50;
-  // maxComputedGenres: number = 5;
-  // domain: string = 'https://cdn.freesound.org/mtg-jamendo/raw_30s/audio/00/';
-  // crawlNewDomain: boolean = true;
+  services: PaidService[];
 
   isStarted: boolean = false;
   forceCrawlNewDomain: boolean = true;
+  maxPrice: string = 'Not yet computed...';
 
   crawlingRequestForm = this.fb.group({
     domain: ['https://cdn.freesound.org/mtg-jamendo/raw_30s/audio/00/', this.domainConditionalValidator()],
-    maxComputedGenres: [3, Validators.compose([Validators.required, Validators.min(1)])],
-    maxCrawledResources: [15, Validators.compose([Validators.required, Validators.min(1)])],
+    maxComputedGenres: [3, Validators.compose([Validators.required, Validators.min(1), Validators.max(10)])],
+    maxCrawledResources: [15, Validators.compose([Validators.required, Validators.min(1), Validators.max(100)])],
     desiredGenreId: [1, Validators.required],
     crawlNewDomain: [true]
   });
@@ -34,12 +30,13 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
   constructor(
     private genreService: GenreService,
     private crawlerService: CrawlerService,
-    private router: Router,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
+    private paidServiceService: PaidServiceService
   ) {
     this.crawlerState = this.crawlerService.getCurrentCrawlerState();
     this.updateAvailableGenres();
+    this.services = this.paidServiceService.getServices();
   }
 
   ngOnInit(): void {
@@ -55,6 +52,28 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
       .subscribe(_ => this.updateAvailableGenres());
     if (this.genres.length === 0)
       this.genreService.refreshGenres();
+
+    this.paidServiceService.getServicesObservable().subscribe(services => {
+      this.services = services;
+      this.updateMaxPrice();
+    });
+    if (this.services.length === 0)
+      this.paidServiceService.refreshServices();
+  }
+
+  updateMaxPrice(): void {
+    const maxComputedGenres = this.crawlingRequestForm.controls.maxComputedGenres.value || 0;
+    const maxCrawledResources = this.crawlingRequestForm.controls.maxCrawledResources.value || 0;
+
+    const genreComputationPrice = this.getServiceByName('genre_computation')?.price || 0;
+    const crawledResourcePrice = this.getServiceByName('crawled_resource')?.price || 0;
+
+    const maxPrice = maxComputedGenres * genreComputationPrice + maxCrawledResources * crawledResourcePrice;
+    this.maxPrice = `Max price: ${maxPrice}`;
+  }
+
+  private getServiceByName(name: string): PaidService | null {
+    return this.services.find(s => s.serviceName === name) || null;
   }
 
   onCrawlNewDomainChange(): void {
@@ -68,7 +87,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
   private updateAvailableGenres(): void {
     this.genres = this.genreMapToArray(this.genreService.getCurrentGenres());
     const controls = [
-      this.crawlingRequestForm.controls.maxComputedGenres, 
+      this.crawlingRequestForm.controls.maxComputedGenres,
       this.crawlingRequestForm.controls.maxCrawledResources
     ];
 

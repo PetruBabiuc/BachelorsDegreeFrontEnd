@@ -73,6 +73,14 @@ export class SongService {
     );
   }
 
+  editSong(songId: number, name: string, author: string, genreId: number): Observable<any> {
+    return this.http.post(`${environment.allSongsUrl}/${songId}/edit`, {
+      song_name: name,
+      author: author,
+      genre_id: genreId
+    });
+  }
+
   private mapResponseToSong(song: any): Song {
     return {
       songId: song.song_id,
@@ -82,5 +90,9 @@ export class SongService {
       author: song.song_info.author,
       originalFormatId: song.song_info.original_format_id
     };
+  }
+
+  deleteSong(song: Song): Observable<any> {
+    return this.http.delete(`${environment.allSongsUrl}/${song.songId}`);
   }
 }

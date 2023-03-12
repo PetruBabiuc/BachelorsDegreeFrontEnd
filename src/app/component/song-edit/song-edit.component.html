@@ -1,0 +1,27 @@
+<form class="song-form" [formGroup]="songForm" (ngSubmit)="onSubmit()">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input type="text" formControlName="name"
+                [ngClass]="{'ng-dirty': songForm.controls.name.invalid, 'ng-invalid': songForm.controls.name.invalid }"
+                pInputText>
+            <label for="float-input">Name</label>
+        </span>
+    </div>
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input type="text" formControlName="author"
+                [ngClass]="{'ng-dirty': songForm.controls.author.invalid, 'ng-invalid': songForm.controls.author.invalid }"
+                pInputText>
+            <label for="float-input">Author</label>
+        </span>
+    </div>
+
+    <div class="p-inputgroup">
+        <p-dropdown [options]="genres" styleClass="mb-2 md:mb-0" formControlName="genreId" optionLabel="genreName"
+            optionValue="genreId" appendTo="body">
+        </p-dropdown>
+    </div>
+
+    <button pButton [label]="isSubmitting ? 'Editing...' : 'Editing'" [disabled]="!songForm.valid || isSubmitting"
+        [icon]="isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-pencil'" iconPos="right"></button>
+</form>

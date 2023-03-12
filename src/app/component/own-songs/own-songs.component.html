@@ -1,3 +1,6 @@
+<p-dialog header="Edit song" [(visible)]="isEditingSong" [modal]="true">
+    <app-song-edit [song]="songBeingEdited" (onEdited)="isEditingSong = false"></app-song-edit>
+</p-dialog>
 <p-panel header="Own songs">
     <p-dataView #dv [value]="songs" [paginator]="true" [rows]="3" filterBy="songName" [sortField]="sortField"
         [sortOrder]="sortOrder" layout="list">
@@ -25,10 +28,10 @@
                             class="category">{{genres.get(song.genreId)}}</span>
                     </div>
                     <div class="product-list-action">
-                        <p-button icon="pi pi-pencil" label="Edit"></p-button>
+                        <p-button icon="pi pi-pencil" label="Edit" (click)="onEdit(song)"></p-button>
                         <br />
                         <button icon="pi pi-trash" pButton type="button" label="Delete"
-                            class="p-button-danger"></button>
+                            class="p-button-danger" (click)="onDelete(song)"></button>
                     </div>
                 </div>
             </div>

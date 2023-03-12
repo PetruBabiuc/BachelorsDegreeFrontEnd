@@ -73,7 +73,7 @@ export class AddSongComponent implements AfterViewInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Song uploaded!',
-          detail: `The song ${name} has the genre ${genre}.`,
+          detail: `The song ${name} has the ${genre} genre.`,
           life: 5000
         });
         this.isSubmitting = false;

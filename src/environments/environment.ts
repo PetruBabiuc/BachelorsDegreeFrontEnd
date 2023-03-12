@@ -31,6 +31,7 @@ export const environment = {
 
   // Songs
   songAdderUrl: `${SONG_ADDER_CONTROLLER_URL}/songs`,
+  allSongsUrl: `${DATABASE_API_URL}/songs`,
 
   // CrawlerManagementController
   crawlerManagementRootUrl: CRAWLER_MANAGEMENT_CONTROLLER_URL,

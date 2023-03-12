@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SelectItem } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { Song } from 'src/app/model';
 import { SongService } from 'src/app/service';
 import { GenreService } from 'src/app/service/genre/genre.service';
@@ -12,18 +12,20 @@ import { GenreService } from 'src/app/service/genre/genre.service';
 })
 export class OwnSongsComponent implements OnInit {
   sortOptions: SelectItem[] = [];
-
   sortOrder: number = 0;
-
   sortField: string = 'songName';
 
   songs: Song[] = [];
   genres: Map<number, string> = new Map<number, string>();
 
+  isEditingSong: boolean = false;
+  songBeingEdited: Song | null = null;
+
   constructor(
     private router: Router,
     private songService: SongService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private messageService: MessageService
   ) {
     this.sortOptions = [
       { label: 'Sort by name', value: 'songName' },
@@ -52,5 +54,27 @@ export class OwnSongsComponent implements OnInit {
       this.sortOrder = 1;
       this.sortField = value;
     }
+  }
+
+  onEdit(song: Song): void {
+    this.songBeingEdited = { ...song };
+    this.isEditingSong = true;
+  }
+
+  onDelete(song: Song): void {
+    this.songService.deleteSong(song).subscribe(
+      () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Song successfully deleted!'
+        });
+        this.songService.refreshOwnSongs();
+      },
+      error => this.messageService.add({
+        severity: 'success',
+        summary: 'Song deletion failed!',
+        detail: `An error occured: ${error.message}`
+      })
+    )
   }
 }

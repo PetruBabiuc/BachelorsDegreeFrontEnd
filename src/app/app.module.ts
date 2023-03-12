@@ -29,7 +29,8 @@ import { MessageModule } from 'primeng/message';
 import { MessageComponent } from './component/message/message.component';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
+import { SongEditComponent } from './component/song-edit/song-edit.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ToastModule } from 'primeng/toast';
     RegisterComponent,
     UserFormComponent,
     MessageComponent,
+    SongEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ import { ToastModule } from 'primeng/toast';
     MessagesModule,
     MessageModule,
     ToastModule,
+    DialogModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

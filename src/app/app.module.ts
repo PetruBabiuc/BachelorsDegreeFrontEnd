@@ -22,6 +22,14 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { StartCrawlingComponent } from './component/start-crawling/start-crawling.component';
 import { CrawlerStateComponent } from './component/crawler-state/crawler-state.component';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RegisterComponent } from './component/register/register.component';
+import { UserFormComponent } from './component/user-form/user-form.component';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { MessageComponent } from './component/message/message.component';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +40,10 @@ import { CheckboxModule } from 'primeng/checkbox';
     OwnSongsComponent,
     AddSongComponent,
     StartCrawlingComponent,
-    CrawlerStateComponent
+    CrawlerStateComponent,
+    RegisterComponent,
+    UserFormComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,11 +60,15 @@ import { CheckboxModule } from 'primeng/checkbox';
     DataViewModule,
     DropdownModule,
     FileUploadModule,
-    CheckboxModule
+    CheckboxModule,
+    MessagesModule,
+    MessageModule,
+    ToastModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

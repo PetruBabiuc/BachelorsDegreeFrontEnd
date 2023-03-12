@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Message, MessageService } from 'primeng/api';
 import { CrawlerState, Genre, PaidService } from 'src/app/model';
 import { PaidServiceService } from 'src/app/service';
 import { CrawlerService } from 'src/app/service/crawler/crawler.service';
@@ -32,7 +33,8 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     private crawlerService: CrawlerService,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
-    private paidServiceService: PaidServiceService
+    private paidServiceService: PaidServiceService,
+    private messageService: MessageService
   ) {
     this.crawlerState = this.crawlerService.getCurrentCrawlerState();
     this.updateAvailableGenres();
@@ -46,7 +48,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
         this.handleCrawlerStateChange(state);
         this.updateAvailableGenres();
       });
-    this.crawlerService.refreshCrawlerState();
+    this.crawlerService.refreshCrawlerState().subscribe();
 
     this.genreService.getGenresObservable()
       .subscribe(_ => this.updateAvailableGenres());
@@ -96,8 +98,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
         this.crawlerState?.genreIdToSongsCount.some(g2 =>
           g2.genreId === g1.genreId));
       controls.forEach(c => c.disable());
-    }
-    else {
+    } else {
       controls.forEach(c => c.enable());
     }
   }
@@ -160,6 +161,11 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     };
   }
 
+  private handleCrawlingResponse(message: Message): void {
+    this.messageService.add(message);
+    this.isStarted = false;
+  }
+
   onSubmit(): void {
     if (!this.crawlingRequestForm.valid)
       return;
@@ -169,12 +175,20 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     if (formControls.crawlNewDomain.value)
       domain = formControls.domain.value;
 
-    try {
-      this.crawlerService.startCrawling(formControls.desiredGenreId.value!,
-        formControls.maxCrawledResources.value!, formControls.maxComputedGenres.value!, domain);
-      this.isStarted = true;
-    } catch {
-      this.isStarted = false;
-    }
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Crawling started!'
+    });
+
+    this.crawlerService.startCrawling(formControls.desiredGenreId.value!,
+      formControls.maxCrawledResources.value!, formControls.maxComputedGenres.value!, domain).subscribe(
+        message => this.handleCrawlingResponse(message),
+        error => this.handleCrawlingResponse({
+          severity: error,
+          summary: 'Crawling request error',
+          detail: `An error occured: ${error.message}`
+        })
+      );
+    this.isStarted = true;
   }
 }

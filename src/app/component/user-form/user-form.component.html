@@ -1,12 +1,12 @@
-<!-- <p-panel header="Login">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<p-panel [header]="panelHeader">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
         <div class="p-inputgroup">
             <span class="p-inputgroup-addon">
                 <i class="pi pi-user"></i>
             </span>
             <span class="p-float-label">
                 <input type="text" formControlName="userName"
-                    [ngClass]="{'ng-dirty': loginForm.controls.userName.invalid, 'ng-invalid': loginForm.controls.userName.invalid }"
+                    [ngClass]="{'ng-dirty': userForm.controls.userName.invalid, 'ng-invalid': userForm.controls.userName.invalid }"
                     pInputText>
                 <label for="float-input">Username</label>
             </span>
@@ -18,14 +18,12 @@
             </span>
             <span class="p-float-label">
                 <input type="password" formControlName="password"
-                    [ngClass]="{'ng-dirty': loginForm.controls.password.invalid, 'ng-invalid': loginForm.controls.password.invalid }"
+                    [ngClass]="{'ng-dirty': userForm.controls.password.invalid, 'ng-invalid': userForm.controls.password.invalid }"
                     pInputText>
                 <label for="float-input">Password</label>
             </span>
         </div>
         
-        <button pButton type="submit" label="Submit" [disabled]="!loginForm.valid"></button>
+        <button pButton type="submit" label="Submit" [disabled]="!userForm.valid"></button>
     </form>
-</p-panel> -->
-
-<app-user-form panelHeader="Login" (onFormSubmitted)="onSubmit($event)"></app-user-form>
+</p-panel>

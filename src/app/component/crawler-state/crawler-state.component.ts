@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { CrawlerState } from 'src/app/model';
 import { CrawlerService } from 'src/app/service/crawler/crawler.service';
 import { GenreService } from 'src/app/service/genre/genre.service';
@@ -15,7 +16,8 @@ export class CrawlerStateComponent implements OnInit {
 
   constructor(
     private crawlerService: CrawlerService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private messageService: MessageService
   ) {
     this.genres = this.genreService.getCurrentGenres();
     this.updateAvailable = this.crawlerService.isUpdateAvailable();
@@ -24,7 +26,14 @@ export class CrawlerStateComponent implements OnInit {
   onUpdateClick(): void {
     if (!this.updateAvailable)
       return;
-    this.crawlerService.refreshCrawlerState();
+    this.messageService.add({
+      severity: 'info',
+      summary: "Fetching crawler's state..."
+    });
+    this.crawlerService.refreshCrawlerState().subscribe(_ => this.messageService.add({
+      severity: 'success',
+      summary: "Crawler's state fetched!"
+    }));
   }
 
   ngOnInit(): void {
@@ -38,6 +47,6 @@ export class CrawlerStateComponent implements OnInit {
     this.crawlerService.getCrawlerStateObservable().subscribe(crawlerState => {
       this.crawlerState = crawlerState;
     });
-    this.crawlerService.refreshCrawlerState();
+    this.crawlerService.refreshCrawlerState().subscribe();
   }
 }

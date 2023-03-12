@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { SongService } from 'src/app/service';
 
@@ -22,6 +23,7 @@ export class AddSongComponent implements AfterViewInit {
   constructor(
     private songService: SongService,
     private router: Router,
+    private messageService: MessageService,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef
   ) {
@@ -61,12 +63,30 @@ export class AddSongComponent implements AfterViewInit {
     const name = this.songForm.controls.name.value;
     const author = this.songForm.controls.author.value;
 
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Uploading song...'
+    });
+
     this.songService.addSong(name!, author!, this.songUpload.files[0]).subscribe(
       genre => {
-        alert(`The song ${name} has the genre ${genre}!\nCurrent route: ${this.router.url}`);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Song uploaded!',
+          detail: `The song ${name} has the genre ${genre}.`,
+          life: 5000
+        });
         this.isSubmitting = false;
         this.songService.refreshOwnSongs();
         this.router.navigateByUrl('/own-songs');
+      },
+      _ => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Song upload failed!',
+          detail: `Song ${name} hasn't been uploaded...`
+        });
+        this.isSubmitting = false;
       }
     );
   }

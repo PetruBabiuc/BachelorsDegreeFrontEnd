@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Message } from 'primeng/api';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { CrawlerState, GenreIdToSongsCount } from 'src/app/model';
 import { environment } from 'src/environments/environment';
 import { AccountService } from '../account/account.service';
@@ -41,20 +42,31 @@ export class CrawlerService {
     return this.crawlerStateSubject.asObservable();
   }
 
-  refreshCrawlerState(): void {
+  refreshCrawlerState(): Observable<CrawlerState | null> {
     this.updateAvailableSubject.next(false);
     setTimeout(() => this.updateAvailableSubject.next(true), 5_000);
-    this.http.get<any>(environment.crawlerStateUrl).subscribe(
-      state => {
-        this.crawlerStateSubject.next(this.mapCrawlerState(state));
-      },
-      error => {
-        if (error.status === 404)
-          this.crawlerStateSubject.next(null);
-      })
+    return this.http.get<any>(environment.crawlerStateUrl).pipe(
+      map(
+        state => {
+          state = this.mapCrawlerState(state);
+          this.crawlerStateSubject.next(state);
+          return state;
+        }
+      ),
+      catchError(
+        error => {
+          if (error.status === 404) {
+            this.crawlerStateSubject.next(null);
+            return of(null);
+          }
+          else
+            throw error;
+        })
+    )
   }
 
-  startCrawling(desiredGenreId: number, maxCrawledResources: number, maxComputedGenres: number, domain: string | null): void {
+  startCrawling(desiredGenreId: number, maxCrawledResources: number,
+    maxComputedGenres: number, domain: string | null): Observable<Message> {
     const body: any = {
       desired_genre_id: desiredGenreId,
       max_crawled_resources: maxCrawledResources,
@@ -64,23 +76,31 @@ export class CrawlerService {
     if (domain !== null)
       body.domain = domain;
 
-    this.http.post(environment.startCrawlingUrl, body, { observe: 'response', responseType: 'blob' }).subscribe(
-      response => {
+    return this.http.post(environment.startCrawlingUrl, body, { observe: 'response', responseType: 'blob' }).pipe(
+      map(response => {
         const contentTye = response.headers.get('Content-Type');
         if (contentTye === 'application/json') {
-          console.log(`Start crawling JSON response: ${JSON.stringify(response)}`);
-          alert('No song was found...');
+          return {
+            severity: 'warn',
+            summary: 'Crawling finished!',
+            detail: 'No song having the desired genre was found..'
+          };
+          // console.log(`Start crawling JSON response: ${JSON.stringify(response)}`);
         } else if (contentTye === 'audio/*') {
           if (response.body === null)
-            throw Error(`Error: the Content-Type was ${contentTye} the response body was NULL.`)
+            throw Error(`Error: the Content-Type was ${contentTye} the response body was NULL.`);
           const downloadLink = document.createElement('a');
           downloadLink.href = URL.createObjectURL(new Blob([response.body], { type: response.body.type }));
           downloadLink.download = 'Song.mp3';
           downloadLink.click();
-          alert('Song downloaded!');
+          return {
+            severity: 'success',
+            summary: 'Crawling finished!',
+            detail: 'The song was downloaded.'
+          };
         }
-        this.router.navigateByUrl('/crawler-status');
-      }
+        throw Error(`Response with unexpected Content-Type: ${contentTye}`);
+      })
     );
   }
 

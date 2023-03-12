@@ -18,6 +18,7 @@ export const environment = {
   databaseRootUrl: DATABASE_API_URL,
   loginUrl: `${DATABASE_API_URL}/login`,
   logoutUrl: `${DATABASE_API_URL}/logout`,
+  registerUrl: `${DATABASE_API_URL}/register`,
 
   // Services
   servicesUrl: `${DATABASE_API_URL}/services`,

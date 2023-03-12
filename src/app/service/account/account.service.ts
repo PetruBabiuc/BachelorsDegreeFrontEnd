@@ -55,6 +55,13 @@ export class AccountService {
     localStorage.removeItem(AccountService.ACCOUNT_KEY);
   }
 
+  register(userName: string, password: string): Observable<null> {
+    return this.http.post<null>(environment.registerUrl, {
+      user_name: userName,
+      password: password
+    });
+  }
+
   private jwtToAccount(jwt: string): Account {
     const payload = this.jwtHelper.decodeToken(jwt);
     return {

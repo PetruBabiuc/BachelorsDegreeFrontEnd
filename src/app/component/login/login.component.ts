@@ -1,6 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { UserCredentials } from 'src/app/model';
 import { AccountService } from 'src/app/service';
 
 @Component({
@@ -8,51 +9,30 @@ import { AccountService } from 'src/app/service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements AfterViewInit {
-
-  loginForm = this.fb.group({
-    userName: ['', Validators.required],
-    password: ['', Validators.required]
-  });
+export class LoginComponent {
 
   constructor(
     private accountService: AccountService,
-    private fb: FormBuilder,
     private router: Router,
-    private cdRef: ChangeDetectorRef
+    private messageService: MessageService
   ) {
 
   }
-
-  ngAfterViewInit(): void {
-    const controls = this.loginForm.controls;
-    Object.values(controls).forEach(c => {
-      c.markAsTouched();
-      c.markAsDirty();
-      c.updateValueAndValidity();
-    });
-
-    this.loginForm.markAsTouched();
-    this.loginForm.markAsDirty();
-    this.loginForm.updateValueAndValidity();
-
-    this.cdRef.detectChanges();
-  }
-
-  onSubmit() {
-    if (!this.loginForm.valid)
-      return;
-
-    const userName = this.loginForm.controls.userName.value;
-    const password = this.loginForm.controls.password.value;
-
-    this.accountService.login(userName!, password!).subscribe(
-      account => this.router.navigateByUrl('/home'),
+  onSubmit(userCredentaials: UserCredentials) {
+    this.accountService.login(userCredentaials.userName!, userCredentaials.password!).subscribe(
+      account => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Login successful!'
+        });
+        this.router.navigateByUrl('/home');
+      },
       error => {
-        if (error.status === 401)
-          alert('Invalid credentials!');
-        else
-          throw error;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Login failed!',
+          detail: 'The credentials were invalid.',
+        });
       }
     )
   }

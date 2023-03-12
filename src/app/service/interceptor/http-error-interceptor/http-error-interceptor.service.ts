@@ -2,6 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AccountService } from '../../account/account.service';
 
 @Injectable({
@@ -21,13 +22,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         catchError((error: HttpErrorResponse) => {
           if (error.error instanceof ErrorEvent)
             return throwError(() => new Error(`Client side error: ${error.error.message}`));
-          else if (error.status === 403 || error.status === 401) {
+          else if ((error.status === 403 || error.status === 401) && request.url !== environment.loginUrl) {
+            console.log(`URL: ${request.url}`)
             this.accountService.logOut();
             this.router.navigateByUrl('/home');
             return throwError(() => new Error('JWT Expired...'));
           }
+          else if (request.url === environment.loginUrl && error.status === 401)
+            return throwError(() => new Error('Login failed! Invalid credentials'));
           else
-            return throwError(() => new Error(`Server side error: ${error.error.message}`));
+            return throwError(() => error);
         })
       );
   }

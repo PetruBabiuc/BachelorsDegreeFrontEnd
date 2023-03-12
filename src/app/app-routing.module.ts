@@ -8,6 +8,7 @@ import {
   OwnSongsComponent,
   StartCrawlingComponent,
 } from './component';
+import { RegisterComponent } from './component/register/register.component';
 import { IsNotLoggedService, IsSimpleUserService } from './service/page-guard';
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
 
   // Account
   { path: 'login', component: LoginComponent, canActivate: [IsNotLoggedService] },
-  // { path: 'account/register', component: RegisterComponent },
+  { path: 'register', component: RegisterComponent, canActivate: [IsNotLoggedService] },
 
   // Songs
   { path: 'own-songs', component: OwnSongsComponent, canActivate: [IsSimpleUserService] },

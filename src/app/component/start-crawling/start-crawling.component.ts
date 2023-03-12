@@ -20,8 +20,12 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
   forceCrawlNewDomain: boolean = true;
   maxPrice: string = 'Not yet computed...';
 
+  // Tooltips
+  crawlNewDomainTooltip: string = '';
+  onlyDeliverSongsTooltip: string = '';
+
   crawlingRequestForm = this.fb.group({
-    domain: ['https://cdn.freesound.org/mtg-jamendo/raw_30s/audio/00/', this.domainConditionalValidator()],
+    domain: ['https://cdn.freesound.org/mtg-jamendo/raw_30s/audio/00/1002000.mp3', this.domainConditionalValidator()],
     maxComputedGenres: [3, Validators.compose([Validators.required, Validators.min(1), Validators.max(10)])],
     maxCrawledResources: [15, Validators.compose([Validators.required, Validators.min(1), Validators.max(100)])],
     desiredGenreId: [1, Validators.required],
@@ -93,13 +97,27 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
       this.crawlingRequestForm.controls.maxCrawledResources
     ];
 
-    if (!this.crawlingRequestForm.controls.crawlNewDomain.value && this.crawlerState!.resourcesUrlsCount === 0) {
+
+    // If the user wants to continue crawling a domain that has no resources URLs in the queue
+    // and no songs with the genre not yet computed,
+    // the desired genres are restricted to the genres of the songs already found
+    if (!this.crawlingRequestForm.controls.crawlNewDomain.value && // Not wanting to crawl a new domain 
+      this.crawlerState!.resourcesUrlsCount === 0 && // No more resources URLs in queue
+      this.crawlerState?.genreIdToSongsCount.find(pair => pair.genreId === 7) === undefined // No songs with the genre not computed yet
+      ) {
       this.genres = this.genres.filter(g1 =>
         this.crawlerState?.genreIdToSongsCount.some(g2 =>
           g2.genreId === g1.genreId));
-      controls.forEach(c => c.disable());
+      controls.forEach(c => {
+        c.disable();
+        c.setValue(1);
+      });
+      
+      this.onlyDeliverSongsTooltip = `There are no more resources to be crawled nor more songs with uncomputed genre. 
+      You can only receive the songs that haven't been delivered to you yet.`;
     } else {
       controls.forEach(c => c.enable());
+      this.onlyDeliverSongsTooltip = '';
     }
   }
 
@@ -111,6 +129,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
       this.forceCrawlNewDomain = true;
       crawlNewDomainControl.setValue(true);
       this.isStarted = false;
+      this.crawlNewDomainTooltip = 'No crawling session to continue';
       return;
     }
     this.forceCrawlNewDomain = state.resourcesUrlsCount === 0
@@ -119,6 +138,11 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     crawlNewDomainControl.setValue(this.forceCrawlNewDomain);
     this.isStarted = state.isStarted;
     this.onCrawlNewDomainChange();
+
+    if (this.forceCrawlNewDomain)
+      this.crawlNewDomainTooltip = 'The domain is completely crawled so you have start crawling another one';
+    else
+      this.crawlNewDomainTooltip = '';
   }
 
   private genreMapToArray(map: Map<number, string>): Genre[] {
@@ -164,6 +188,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
   private handleCrawlingResponse(message: Message): void {
     this.messageService.add(message);
     this.isStarted = false;
+    this.crawlerService.refreshCrawlerState().subscribe();
   }
 
   onSubmit(): void {
@@ -180,8 +205,11 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
       summary: 'Crawling started!'
     });
 
+    let maxCrawledResources = formControls.maxCrawledResources.value!;
+    let maxComputedGenres = formControls.maxComputedGenres.value!;
+  
     this.crawlerService.startCrawling(formControls.desiredGenreId.value!,
-      formControls.maxCrawledResources.value!, formControls.maxComputedGenres.value!, domain).subscribe(
+      maxCrawledResources, maxComputedGenres, domain).subscribe(
         message => this.handleCrawlingResponse(message),
         error => this.handleCrawlingResponse({
           severity: error,

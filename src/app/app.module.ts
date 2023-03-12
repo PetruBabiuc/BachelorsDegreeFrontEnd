@@ -31,6 +31,11 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SongEditComponent } from './component/song-edit/song-edit.component';
 import { DialogModule } from 'primeng/dialog';
+import { ChartModule } from 'primeng/chart';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
+
 
 @NgModule({
   declarations: [
@@ -67,6 +72,10 @@ import { DialogModule } from 'primeng/dialog';
     MessageModule,
     ToastModule,
     DialogModule,
+    ChartModule,
+    CardModule,
+    DividerModule,
+    TooltipModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

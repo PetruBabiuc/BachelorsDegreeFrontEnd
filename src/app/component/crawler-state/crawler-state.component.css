@@ -1,0 +1,19 @@
+div.crawler-state-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+div.doughnut-container {
+    width: 500px;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+}
+
+p-card.crawler-state-card {
+    display: block;
+    width: 80%;
+}

@@ -3,7 +3,8 @@
         <br />
         <div class="p-inputgroup">
             <span class="p-inputgroup-addon">
-                <p-checkbox [binary]="true" [formControl]="crawlingRequestForm.controls['crawlNewDomain']"
+                <p-checkbox [pTooltip]="crawlNewDomainTooltip" 
+                [binary]="true" [formControl]="crawlingRequestForm.controls['crawlNewDomain']"
                     (onChange)="onCrawlNewDomainChange()" [readonly]="forceCrawlNewDomain"></p-checkbox>
             </span>
             <span class="p-float-label">
@@ -16,25 +17,26 @@
 
         <div class="p-inputgroup">
             <p-dropdown [options]="genres" styleClass="mb-2 md:mb-0" formControlName="desiredGenreId"
-                optionLabel="genreName" optionValue="genreId"></p-dropdown>
+                optionLabel="genreName" optionValue="genreId" [pTooltip]="onlyDeliverSongsTooltip">
+            </p-dropdown>
         </div>
 
         <div class="p-inputgroup">
             <span class="p-float-label">
                 <input type="number" formControlName="maxCrawledResources"
                     [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxCrawledResources.invalid, 'ng-invalid': crawlingRequestForm.controls.maxCrawledResources.invalid }"
-                    (change)="updateMaxPrice()" pInputText>
+                    (change)="updateMaxPrice()" [pTooltip]="onlyDeliverSongsTooltip" pInputText>
                 <label for="float-input">Maximum number of crawled resources</label>
             </span>
+
             <div style="margin-right: 20px;"></div>
             <span class="p-float-label">
                 <input type="number" formControlName="maxComputedGenres"
                     [ngClass]="{'ng-dirty': crawlingRequestForm.controls.maxComputedGenres.invalid, 'ng-invalid': crawlingRequestForm.controls.maxComputedGenres.invalid }"
-                    (change)="updateMaxPrice()" pInputText>
+                    (change)="updateMaxPrice()" [pTooltip]="onlyDeliverSongsTooltip" pInputText>
                 <label for="float-input">Maximum number of computed genres</label>
             </span>
         </div>
-
 
         <div class="p-inputgroup">
             <span class="p-inputgroup-addon"><i class="pi pi-dollar"></i></span>

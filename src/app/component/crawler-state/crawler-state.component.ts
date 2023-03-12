@@ -13,6 +13,8 @@ export class CrawlerStateComponent implements OnInit {
   crawlerState: CrawlerState | null = null;
   genres: Map<number, string>;
   updateAvailable: boolean;
+  alreadyFoundSongsData: any;
+  anySongFound: boolean = false;
 
   constructor(
     private crawlerService: CrawlerService,
@@ -38,7 +40,7 @@ export class CrawlerStateComponent implements OnInit {
 
   ngOnInit(): void {
     this.crawlerService.isUpdateAvailableObservable().subscribe(value => this.updateAvailable = value);
-    
+
     this.genreService.getGenresObservable().subscribe(genres => this.genres = genres);
     if (this.genres.size === 0)
       this.genreService.refreshGenres();
@@ -46,6 +48,48 @@ export class CrawlerStateComponent implements OnInit {
     this.crawlerState = this.crawlerService.getCurrentCrawlerState();
     this.crawlerService.getCrawlerStateObservable().subscribe(crawlerState => {
       this.crawlerState = crawlerState;
+
+      if (crawlerState !== null) {
+        this.anySongFound = false;
+        
+        const data: number[] = [];
+        for (let i = 1; i <= this.genres.size; ++i) {
+          const pair = crawlerState.genreIdToSongsCount.find(pair => pair.genreId === i);
+          if (pair !== undefined) {
+            data.push(pair.songsCount);
+            this.anySongFound = true;
+          }
+          else
+            data.push(0);
+        }
+
+        this.alreadyFoundSongsData = {
+          labels: [...this.genres.values()],
+          datasets: [
+            {
+              data: data,
+              backgroundColor: [
+                `#FF6384`,
+                `#36A2EB`,
+                `#FFCE56`,
+                '#6B5B95',
+                '#88B04B',
+                '#955251',
+                '#7FCDCD'
+              ],
+              hoverBackgroundColor: [
+                `#FF6384`,
+                `#36A2EB`,
+                `#FFCE56`,
+                '#6B5B95',
+                '#88B04B',
+                '#955251',
+                '#7FCDCD'
+              ]
+            }
+          ]
+        };
+      }
     });
     this.crawlerService.refreshCrawlerState().subscribe();
   }

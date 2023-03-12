@@ -1,28 +1,42 @@
 <p-panel header="Crawler state">
-    <button pButton icon="pi pi-replay" iconPos="left" label="Update status" [disabled]="!updateAvailable"
-    (click)="onUpdateClick()"></button>
-    <br />
-    <br />
-    <div *ngIf="crawlerState !== null; else elseBlock">
-        <ul>
-            <li>Domain: {{crawlerState.domain}}</li>
-            <li>Crawling in progress: {{crawlerState.isStarted}}</li>
-            <li>Resources in queue: {{crawlerState.resourcesUrlsCount}}</li>
-            <li *ngIf="crawlerState.genreIdToSongsCount.length > 0; else elseBlock">
-                    Songs found:
-                    <ul>
-                        <li *ngFor="let pair of crawlerState.genreIdToSongsCount">
-                            {{genres.get(pair.genreId)}}: {{pair.songsCount}}
-                        </li>
-                    </ul>
-            </li>
+    <div class="centered">
+        <button class="justified" pButton icon="pi pi-replay" iconPos="left" label="Update status" [disabled]="!updateAvailable"
+        (click)="onUpdateClick()"></button>
+    </div>
+    <p-divider></p-divider>
+    <div class="crawler-state-div" *ngIf="crawlerState !== null; else elseBlock">
+        <p-card class="crawler-state-card" header="General information">
+            <p>Domain: {{crawlerState.domain}}</p>
+            <p>Crawling in progress: {{crawlerState.isStarted}}</p>
+            <p>Resources in queue: {{crawlerState.resourcesUrlsCount}}</p>
+        </p-card>
+        <p-divider layout="vertical"></p-divider>
+        <p-card class="crawler-state-card" header="Found songs">
+            <div *ngIf="anySongFound ; else elseBlock" class="doughnut-container">
+                <p-chart type="doughnut" [data]="alreadyFoundSongsData">
+                </p-chart>
+            </div>
             <ng-template #elseBlock>
-                <li>All the songs already found were delivered.</li>
+                <p>All the songs already found were delivered.</p>
             </ng-template>
-        </ul>
+        </p-card>
     </div>
     <ng-template #elseBlock>
         <div>The crawler hasn't been used on this account yet.</div>
-        <div>There are no information to display.</div>
+        <div>No information to display...</div>
     </ng-template>
 </p-panel>
+
+<!-- <div>
+    <div *ngIf="crawlerState.genreIdToSongsCount.length > 0; else elseBlock">
+        <h2 class="centered-text">Found songs</h2>
+        <br />
+        <div style="width: 500px;">
+            <p-chart type="doughnut" [data]="alreadyFoundSongsData">
+            </p-chart>
+        </div>
+    </div>
+    <ng-template #elseBlock>
+        <p>All the songs already found were delivered.</p>
+    </ng-template>
+</div> -->

@@ -1,0 +1,11 @@
+<p-panel header="Current costs">
+    <div *ngIf="anyServiceConsumed; else elseBlock">
+        <h2 style="text-align: center;">Total: ${{total}}</h2>
+        <div class="chart-container">
+            <p-chart type="pie" [data]="serviceData"></p-chart>
+        </div>
+    </div>
+    <ng-template #elseBlock>
+        <h2>No service consumed yet.</h2>
+    </ng-template>
+</p-panel>

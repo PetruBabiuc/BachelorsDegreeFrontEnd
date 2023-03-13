@@ -112,7 +112,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
         c.disable();
         c.setValue(1);
       });
-      
+      this.crawlingRequestForm.controls.desiredGenreId.setValue(this.genres[0].genreId);
       this.onlyDeliverSongsTooltip = `There are no more resources to be crawled nor more songs with uncomputed genre. 
       You can only receive the songs that haven't been delivered to you yet.`;
     } else {

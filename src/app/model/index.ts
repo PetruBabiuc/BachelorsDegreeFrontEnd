@@ -4,5 +4,6 @@ export * from './Genre';
 export * from './Account';
 export * from './PaidService';
 export * from './GenreIdToSongsCount';
-export * from './UserCredentials';
 export * from './CrawlerState';
+export * from './ConsumedService';
+export * from './UserCredentials';

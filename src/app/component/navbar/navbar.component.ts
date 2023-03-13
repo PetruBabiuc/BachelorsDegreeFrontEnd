@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
     if (account !== null) {
       menuItems = [...menuItems, this.getSongsMenuItem(account)];
       if (account.typeId === environment.simpleUserType)
-        menuItems = [...menuItems, this.getCrawlerMenuItem()]
+        menuItems = [...menuItems, this.getCrawlerMenuItem(), this.getPaymentMenuItem()]
     }
 
     return [...menuItems, this.getAccountButton(account)];
@@ -123,5 +123,18 @@ export class NavbarComponent implements OnInit {
       ];
 
     return songsMenuItem;
+  }
+
+  private getPaymentMenuItem(): MenuItem {
+    return {
+      label: 'Payment',
+      icon: 'pi pi-dollar',
+      items: [
+        {
+          label: 'Current costs',
+          routerLink: '/current-costs'
+        }
+      ]
+    }
   }
 }

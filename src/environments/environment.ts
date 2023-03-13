@@ -36,6 +36,9 @@ export const environment = {
   // CrawlerManagementController
   crawlerManagementRootUrl: CRAWLER_MANAGEMENT_CONTROLLER_URL,
 
+  // Users
+  allUsersUrl: `${DATABASE_API_URL}/users`,
+
   startCrawlingUrl: `${CRAWLER_MANAGEMENT_CONTROLLER_URL}/start-crawling`,
   crawlerStateUrl: `${CRAWLER_MANAGEMENT_CONTROLLER_URL}/status`,
 };

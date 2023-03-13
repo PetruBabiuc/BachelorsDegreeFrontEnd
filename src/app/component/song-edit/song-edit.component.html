@@ -22,6 +22,6 @@
         </p-dropdown>
     </div>
 
-    <button pButton [label]="isSubmitting ? 'Editing...' : 'Editing'" [disabled]="!songForm.valid || isSubmitting"
+    <button class="centered-button" pButton [label]="isSubmitting ? 'Editing...' : 'Edit'" [disabled]="!songForm.valid || isSubmitting"
         [icon]="isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-pencil'" iconPos="right"></button>
 </form>

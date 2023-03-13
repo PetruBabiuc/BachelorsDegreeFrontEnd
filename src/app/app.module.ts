@@ -35,6 +35,7 @@ import { ChartModule } from 'primeng/chart';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
+import { CurrentCostsComponent } from './component/current-costs/current-costs.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { TooltipModule } from 'primeng/tooltip';
     UserFormComponent,
     MessageComponent,
     SongEditComponent,
+    CurrentCostsComponent,
   ],
   imports: [
     BrowserModule,

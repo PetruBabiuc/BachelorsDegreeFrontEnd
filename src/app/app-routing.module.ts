@@ -8,6 +8,7 @@ import {
   OwnSongsComponent,
   StartCrawlingComponent,
 } from './component';
+import { CurrentCostsComponent } from './component/current-costs/current-costs.component';
 import { RegisterComponent } from './component/register/register.component';
 import { IsNotLoggedService, IsSimpleUserService } from './service/page-guard';
 
@@ -27,6 +28,9 @@ const routes: Routes = [
   // Crawler
   { path: 'start-crawling', component: StartCrawlingComponent, canActivate: [IsSimpleUserService] },
   { path: 'crawler-status', component: CrawlerStateComponent, canActivate: [IsSimpleUserService] },
+
+  // Costs
+  { path: 'current-costs', component: CurrentCostsComponent, canActivate: [IsSimpleUserService] },  
 
   // Redirect to home in case of unmapped path
   { path: '**', redirectTo: '/home' },

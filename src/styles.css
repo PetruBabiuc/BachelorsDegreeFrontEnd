@@ -28,3 +28,13 @@ body {
 p-dropdown {
     display: flex;
 }
+
+.centered-button {
+    display: flex;
+    margin: auto;
+}
+
+div.chart-container {
+    width: 500px;
+    margin: auto;
+}

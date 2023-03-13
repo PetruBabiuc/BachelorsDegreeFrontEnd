@@ -4,16 +4,12 @@ div.crawler-state-div {
     justify-content: space-around;
 }
 
-div.doughnut-container {
-    width: 500px;
-}
-
-.centered {
-    display: flex;
-    justify-content: center;
+p-card {
+    text-align: center;
 }
 
 p-card.crawler-state-card {
     display: block;
     width: 80%;
 }
+

@@ -2,7 +2,7 @@
     <button class="centered-button" pButton icon="pi pi-replay" iconPos="left" label="Update status"
         [disabled]="!updateAvailable" (click)="onUpdateClick()"></button>
     <p-divider></p-divider>
-    <div class="crawler-state-div" *ngIf="crawlerState !== null; else elseBlock">
+    <div class="crawler-state-div" *ngIf="crawlerState !== null; else crawlerNotUsed">
         <p-card class="crawler-state-card" header="General information">
             <p>Domain: {{crawlerState.domain}}</p>
             <p>Crawling in progress: {{crawlerState.isStarted}}</p>
@@ -10,17 +10,17 @@
         </p-card>
         <p-divider layout="vertical"></p-divider>
         <p-card class="crawler-state-card" header="Found songs">
-            <div class="chart-container" *ngIf="anySongFound ; else elseBlock">
+            <div class="chart-container" *ngIf="anySongFound ; else allSongsDelivered">
                 <p-chart type="doughnut" [data]="alreadyFoundSongsData">
                 </p-chart>
             </div>
-            <ng-template #elseBlock>
+            <ng-template #allSongsDelivered>
                 <p>All the songs already found were delivered.</p>
             </ng-template>
         </p-card>
     </div>
-    <ng-template #elseBlock>
-        <div>The crawler hasn't been used on this account yet.</div>
-        <div>No information to display...</div>
+    <ng-template #crawlerNotUsed>
+        <h2>The crawler hasn't been used on this account yet.</h2>
+        <h2>No information to display...</h2>
     </ng-template>
 </p-panel>

@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
-import { SongService } from 'src/app/service';
+import { AccountService, SongService } from 'src/app/service';
 
 @Component({
   selector: 'app-add-song',
@@ -14,6 +14,7 @@ export class AddSongComponent implements AfterViewInit {
   @ViewChild(FileUpload) songUpload!: FileUpload;
 
   isSubmitting: boolean;
+  isActive: boolean;
 
   songForm = this.fb.group({
     name: ['', Validators.required],
@@ -21,6 +22,7 @@ export class AddSongComponent implements AfterViewInit {
   });
 
   constructor(
+    private accountService: AccountService,
     private songService: SongService,
     private router: Router,
     private messageService: MessageService,
@@ -30,6 +32,11 @@ export class AddSongComponent implements AfterViewInit {
     this.isSubmitting = this.songService.isSubmitting();
     this.songService.isSubmittingObservable().subscribe(isSubmitting =>
       this.isSubmitting = isSubmitting
+    );
+    
+    this.isActive = this.accountService.getCurrentAccount()?.isActive || false;
+    this.accountService.getObservableAccount().subscribe(account =>
+      this.isActive = account?.isActive || false
     );
   }
 

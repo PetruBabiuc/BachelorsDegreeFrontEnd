@@ -38,6 +38,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CurrentCostsComponent } from './component/current-costs/current-costs.component';
 import { OwnBillsComponent } from './component/own-bills/own-bills.component';
 import { TabViewModule } from 'primeng/tabview';
+import { DisabledFunctionalityComponent } from './component/disabled-functionality/disabled-functionality.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { TabViewModule } from 'primeng/tabview';
     SongEditComponent,
     CurrentCostsComponent,
     OwnBillsComponent,
+    DisabledFunctionalityComponent,
   ],
   imports: [
     BrowserModule,

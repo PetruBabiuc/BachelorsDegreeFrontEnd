@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/co
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Message, MessageService } from 'primeng/api';
 import { CrawlerState, Genre, PaidService } from 'src/app/model';
-import { PaidServiceService } from 'src/app/service';
+import { AccountService, PaidServiceService } from 'src/app/service';
 import { CrawlerService } from 'src/app/service/crawler/crawler.service';
 import { GenreService } from 'src/app/service/genre/genre.service';
 
@@ -24,6 +24,8 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
   crawlNewDomainTooltip: string = '';
   onlyDeliverSongsTooltip: string = '';
 
+  isActive: boolean;
+
   crawlingRequestForm = this.fb.group({
     domain: ['https://cdn.freesound.org/mtg-jamendo/raw_30s/audio/00/1002000.mp3', this.domainConditionalValidator()],
     maxComputedGenres: [3, Validators.compose([Validators.required, Validators.min(1), Validators.max(10)])],
@@ -38,11 +40,17 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
     private paidServiceService: PaidServiceService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private accountService: AccountService,
   ) {
     this.crawlerState = this.crawlerService.getCurrentCrawlerState();
     this.updateAvailableGenres();
     this.services = this.paidServiceService.getServices();
+
+    this.isActive = this.accountService.getCurrentAccount()?.isActive || false;
+    this.accountService.getObservableAccount().subscribe(account =>
+      this.isActive = account?.isActive || false
+    );
   }
 
   ngOnInit(): void {
@@ -104,7 +112,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
     if (!this.crawlingRequestForm.controls.crawlNewDomain.value && // Not wanting to crawl a new domain 
       this.crawlerState!.resourcesUrlsCount === 0 && // No more resources URLs in queue
       this.crawlerState?.genreIdToSongsCount.find(pair => pair.genreId === 7) === undefined // No songs with the genre not computed yet
-      ) {
+    ) {
       this.genres = this.genres.filter(g1 =>
         this.crawlerState?.genreIdToSongsCount.some(g2 =>
           g2.genreId === g1.genreId));
@@ -207,7 +215,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
 
     let maxCrawledResources = formControls.maxCrawledResources.value!;
     let maxComputedGenres = formControls.maxComputedGenres.value!;
-  
+
     this.crawlerService.startCrawling(formControls.desiredGenreId.value!,
       maxCrawledResources, maxComputedGenres, domain).subscribe(
         message => this.handleCrawlingResponse(message),

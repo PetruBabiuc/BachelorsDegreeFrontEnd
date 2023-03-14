@@ -1,4 +1,5 @@
-<p-panel header="Add song">
+<p-panel #panel header="Add song">
+    <div *ngIf="isActive; else blockedComponent">
     <br />
     <form class="song-form" [formGroup]="songForm" (ngSubmit)="onSubmit()">
         <div class="p-inputgroup">
@@ -24,4 +25,8 @@
         <button pButton [label]="isSubmitting ? 'Submitting...' : 'Submit'" [disabled]="!isFormValid() || isSubmitting" 
         [icon]="isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-upload'" iconPos="right"></button>
     </form>
+</div>
+<ng-template #blockedComponent>
+    <app-disabled-functionality></app-disabled-functionality>
+</ng-template>
 </p-panel>

@@ -24,7 +24,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             return throwError(() => new Error(`Client side error: ${error.error.message}`));
           else if ((error.status === 403 || error.status === 401) && request.url !== environment.loginUrl) {
             console.log(`URL: ${request.url}`)
-            this.accountService.logOut();
+            this.accountService.clearLocalStorage();
             this.router.navigateByUrl('/home');
             return throwError(() => new Error('JWT Expired...'));
           }

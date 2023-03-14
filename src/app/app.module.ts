@@ -39,6 +39,7 @@ import { CurrentCostsComponent } from './component/current-costs/current-costs.c
 import { OwnBillsComponent } from './component/own-bills/own-bills.component';
 import { TabViewModule } from 'primeng/tabview';
 import { DisabledFunctionalityComponent } from './component/disabled-functionality/disabled-functionality.component';
+import { DeActivateUsersComponent } from './component/de-activate-users/de-activate-users.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { DisabledFunctionalityComponent } from './component/disabled-functionali
     CurrentCostsComponent,
     OwnBillsComponent,
     DisabledFunctionalityComponent,
+    DeActivateUsersComponent,
   ],
   imports: [
     BrowserModule,

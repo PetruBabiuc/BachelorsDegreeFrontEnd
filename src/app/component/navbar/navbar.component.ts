@@ -28,12 +28,27 @@ export class NavbarComponent implements OnInit {
     let menuItems = [this.getHomeMenuItem()];
 
     if (account !== null) {
-      menuItems = [...menuItems, this.getSongsMenuItem(account)];
       if (account.typeId === environment.simpleUserType)
-        menuItems = [...menuItems, this.getCrawlerMenuItem(), this.getPaymentMenuItem()]
+        menuItems = [...menuItems, this.getSongsMenuItem(account), this.getCrawlerMenuItem(), this.getPaymentMenuItem()]
+      else if (account.typeId === environment.adminUserType)
+        menuItems = [...menuItems, this.getUsersMenuItems()];
     }
 
     return [...menuItems, this.getAccountButton(account)];
+  }
+
+  private getUsersMenuItems(): MenuItem {
+    return {
+      label: 'Users',
+      icon: 'pi pi-users',
+      items: [
+        {
+          label: '(De)activate users',
+          icon: 'pi pi-user-edit',
+          routerLink: '/de-activate-users'
+        }
+      ]
+    }
   }
 
   private getCrawlerMenuItem(): MenuItem {

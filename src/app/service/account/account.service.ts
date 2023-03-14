@@ -50,7 +50,11 @@ export class AccountService {
         ));
   }
 
-  logOut() {
+  logOut(): void {
+    this.http.post(environment.logoutUrl, {}).subscribe(() => this.clearLocalStorage());
+  }
+
+  clearLocalStorage(): void {
     this.accountSubject.next(null);
     localStorage.removeItem(AccountService.ACCOUNT_KEY);
   }

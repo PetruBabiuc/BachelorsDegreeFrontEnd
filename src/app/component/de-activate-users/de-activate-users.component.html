@@ -1,0 +1,21 @@
+<p-panel header="(De)activation panel">
+    <p-dataView #dv [value]="users" [paginator]="true" [rows]="4" sortField="userId" layout="list">
+        <ng-template let-user pTemplate="listItem">
+            <div class="list-item">
+                <img src="assets/user.png" alt="No image :(" />
+                <div class="list-detail">
+                    <div class="name">{{user.userName}}</div>
+                    <div><i class="pi pi-tag category-icon"></i><span
+                            class="category">{{getUserType(user.userTypeId)}}</span></div>
+                    <div>Active: <i [style]="{color: user.isActive ? 'green' : 'red'}"
+                            [class]="user.isActive ? 'pi pi-check' : 'pi pi-times'"></i>
+                    </div>
+                </div>
+                <div class="product-list-action">
+                    <p-button [icon]="user.isActive ? 'pi pi-lock' : 'pi pi-lock-open'" 
+                    [label]="user.isActive ? 'Deactivate' : 'Activate'" (click)="toggleActiveStatus(user)"></p-button>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataView>
+</p-panel>

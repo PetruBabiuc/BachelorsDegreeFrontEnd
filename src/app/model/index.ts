@@ -6,5 +6,6 @@ export * from './PaidService';
 export * from './GenreIdToSongsCount';
 export * from './CrawlerState';
 export * from './UserCredentials';
-export * from './BIll';
 export * from './ConsumedService';
+export * from './User';
+export * from './BIll';

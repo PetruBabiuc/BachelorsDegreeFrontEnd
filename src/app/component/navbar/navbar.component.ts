@@ -106,6 +106,7 @@ export class NavbarComponent implements OnInit {
       songsMenuItem.items = [
         {
           label: 'Own songs',
+          icon: 'pi pi-list',
           routerLink: '/own-songs'
         },
         {
@@ -132,7 +133,13 @@ export class NavbarComponent implements OnInit {
       items: [
         {
           label: 'Current costs',
+          icon: 'pi pi-money-bill',
           routerLink: '/current-costs'
+        },
+        {
+          label: 'Bills',
+          icon: 'pi pi-money-bill',
+          routerLink: '/own-bills'
         }
       ]
     }

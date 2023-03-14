@@ -36,7 +36,8 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import { CurrentCostsComponent } from './component/current-costs/current-costs.component';
-
+import { OwnBillsComponent } from './component/own-bills/own-bills.component';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { CurrentCostsComponent } from './component/current-costs/current-costs.c
     MessageComponent,
     SongEditComponent,
     CurrentCostsComponent,
+    OwnBillsComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +80,7 @@ import { CurrentCostsComponent } from './component/current-costs/current-costs.c
     CardModule,
     DividerModule,
     TooltipModule,
+    TabViewModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -9,6 +9,7 @@ import {
   StartCrawlingComponent,
 } from './component';
 import { CurrentCostsComponent } from './component/current-costs/current-costs.component';
+import { OwnBillsComponent } from './component/own-bills/own-bills.component';
 import { RegisterComponent } from './component/register/register.component';
 import { IsNotLoggedService, IsSimpleUserService } from './service/page-guard';
 
@@ -31,6 +32,7 @@ const routes: Routes = [
 
   // Costs
   { path: 'current-costs', component: CurrentCostsComponent, canActivate: [IsSimpleUserService] },  
+  { path: 'own-bills', component: OwnBillsComponent, canActivate: [IsSimpleUserService] },  
 
   // Redirect to home in case of unmapped path
   { path: '**', redirectTo: '/home' },

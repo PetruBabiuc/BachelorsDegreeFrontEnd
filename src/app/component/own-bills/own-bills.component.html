@@ -1,0 +1,35 @@
+<p-panel header="Bills">
+    <p-tabView>
+        <p-tabPanel header="Bills list" leftIcon="pi pi-list">
+            <p-dataView #dv [value]="bills" [paginator]="true" [rows]="3" sortField="billId" layout="list">
+                <ng-template let-bill pTemplate="listItem">
+                        <div class="list-item">
+                            <img src="assets/bill.webp" alt="No image :(" />
+                            <div class="list-detail">
+                                <div>Price: {{bill.price}}</div>
+                                <div>Issued: {{bill.issueDate.toLocaleDateString('en-GB')}}</div>
+                                <div>Deadline: {{bill.deadline.toLocaleDateString('en-GB')}}</div>
+                                <div>Paid: <i [style]="{color: bill.isPaid ? 'green' : 'red'}"
+                                    [class]="bill.isPaid?'pi pi-check':'pi pi-times'"></i></div>
+                            </div>
+                            <div class="product-list-action">
+                                <p-button icon="pi pi-download" label="Download"></p-button>
+                                <div *ngIf="!bill.isPaid">
+                                    <p-button icon="pi pi-dollar" label="Pay"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                </ng-template>
+            </p-dataView>
+        </p-tabPanel>
+        <p-tabPanel header="Graphs" leftIcon="pi pi-chart-bar">
+            <p-card>
+                <div style="width: 1000px; margin: auto;">
+                    <p-chart type="line" [data]="billsData" style="width: 100px"></p-chart>
+                </div>
+            </p-card>
+            <div class="card">
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</p-panel>

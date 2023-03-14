@@ -38,3 +38,19 @@ div.chart-container {
     width: 500px;
     margin: auto;
 }
+
+.p-tabview-nav {
+    display: flex;
+    justify-content: space-around;
+}
+
+.p-tabview-nav > li{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.p-tabview-nav > li > a {
+    display: flex;
+    justify-content: center;
+}

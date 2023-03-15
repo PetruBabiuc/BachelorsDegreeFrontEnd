@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, ignoreElements, map, Observable, tap, throwError } from 'rxjs';
 import { Song } from 'src/app/model';
 import { environment } from 'src/environments/environment';
 import { AccountService } from '../account/account.service';
@@ -10,7 +10,6 @@ import { AccountService } from '../account/account.service';
 })
 export class SongService {
   private ownSongsSubject: BehaviorSubject<Song[]>;
-  private allSongsSubject: BehaviorSubject<Song[]>;
   private isSubmittingSubject: BehaviorSubject<boolean>;
 
   constructor(
@@ -18,12 +17,10 @@ export class SongService {
     private http: HttpClient
   ) {
     this.ownSongsSubject = new BehaviorSubject<Song[]>([]);
-    this.allSongsSubject = new BehaviorSubject<Song[]>([]);
     this.isSubmittingSubject = new BehaviorSubject<boolean>(false);
 
     accountService.getObservableAccount().subscribe(_ => {
       this.ownSongsSubject.next([]);
-      this.allSongsSubject.next([]);
     });
   }
 
@@ -93,6 +90,22 @@ export class SongService {
   }
 
   deleteSong(song: Song): Observable<any> {
-    return this.http.delete(`${environment.allSongsUrl}/${song.songId}`);
+    return this.http.delete(`${environment.songAdderUrl}/${song.songId}`);
+  }
+
+  downloadSong(song: Song): Observable<void> {
+    return this.http.get(`${environment.songAdderUrl}/${song.songId}`, { observe: 'response', responseType: 'blob' }).pipe(
+      map(response => {
+        if (response.body === null) {
+          throwError(() => Error('Response body was NULL...'));
+          return;
+        }
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(new Blob([response.body], { type: response.body.type }));
+        downloadLink.download = `${song.songName}.mp3`;
+        downloadLink.click();
+      })
+    );
   }
 }

@@ -220,7 +220,7 @@ export class StartCrawlingComponent implements AfterViewInit, OnInit {
       maxCrawledResources, maxComputedGenres, domain).subscribe(
         message => this.handleCrawlingResponse(message),
         error => this.handleCrawlingResponse({
-          severity: error,
+          severity: 'error',
           summary: 'Crawling request error',
           detail: `An error occured: ${error.message}`
         })

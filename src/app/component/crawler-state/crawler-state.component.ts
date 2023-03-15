@@ -67,25 +67,7 @@ export class CrawlerStateComponent implements OnInit {
           labels: [...this.genres.values()],
           datasets: [
             {
-              data: data,
-              backgroundColor: [
-                `#FF6384`,
-                `#36A2EB`,
-                `#FFCE56`,
-                '#6B5B95',
-                '#88B04B',
-                '#955251',
-                '#7FCDCD'
-              ],
-              hoverBackgroundColor: [
-                `#FF6384`,
-                `#36A2EB`,
-                `#FFCE56`,
-                '#6B5B95',
-                '#88B04B',
-                '#955251',
-                '#7FCDCD'
-              ]
+              data: data
             }
           ]
         };

@@ -54,3 +54,11 @@ div.chart-container {
     display: flex;
     justify-content: center;
 }
+
+app-song-player {
+    position: fixed;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    margin-top: 100px;
+    width: 500px;
+}

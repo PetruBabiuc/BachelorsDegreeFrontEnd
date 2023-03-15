@@ -19,13 +19,14 @@ export class OwnSongsComponent implements OnInit {
   genres: Map<number, string> = new Map<number, string>();
 
   isEditingSong: boolean = false;
+  isDownloading: boolean = false;
   songBeingEdited: Song | null = null;
 
   constructor(
     private router: Router,
     private songService: SongService,
     private genreService: GenreService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     this.sortOptions = [
       { label: 'Sort by name', value: 'songName' },
@@ -76,5 +77,30 @@ export class OwnSongsComponent implements OnInit {
         detail: `An error occured: ${error.message}`
       })
     )
+  }
+
+  onDownload(song: Song): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: `Downloading ${song.songName}...`
+    });
+
+    this.isDownloading = true;
+
+    this.songService.downloadSong(song).subscribe(
+      () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Song downloaded!'
+        })
+        this.isDownloading = false;
+      },
+      error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error downloading the song...'
+        });
+        this.isDownloading = false;
+      });
   }
 }

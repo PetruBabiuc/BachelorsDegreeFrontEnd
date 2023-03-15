@@ -62,15 +62,7 @@ export class CurrentCostsComponent implements OnInit {
         labels: labels,
         datasets: [
           {
-            data: data,
-            backgroundColor: [
-              '#42A5F5',
-              '#66BB6A'
-            ],
-            hoverBackgroundColor: [
-              '#64B5F6',
-              '#81C784'
-            ]
+            data: data
           }
         ]
       }
